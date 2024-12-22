@@ -1,4 +1,4 @@
-# Cyber Security Competition Website Documentation
+# Cyber Security Competition Website
 # UAS Pemrograman Web - RA
 
 ## Bagian 1: Client-side Programming (30%)
