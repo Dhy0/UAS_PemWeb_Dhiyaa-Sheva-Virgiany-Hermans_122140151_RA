@@ -7,6 +7,7 @@ session_start();
     <meta charset="UTF-8">
     <title>Lomba Cyber Security</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="img/Cyber_security.png" type="image/x-icon" />
 </head>
 <body>
     <nav>

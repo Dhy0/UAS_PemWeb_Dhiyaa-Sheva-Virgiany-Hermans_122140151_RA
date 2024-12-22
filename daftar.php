@@ -108,6 +108,7 @@ if (isset($_SESSION['notification'])) {
     <meta charset="UTF-8">
     <title>Pendaftaran Lomba Cyber Security</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="img/Cyber_security.png" type="image/x-icon" />
     <style>
         .notification {
             padding: 15px;

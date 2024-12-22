@@ -14,6 +14,7 @@ $peserta = Mahasiswa::getDaftarPeserta($conn);
     <meta charset="UTF-8">
     <title>Daftar Peserta Lomba Cyber Security</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="img/Cyber_security.png" type="image/x-icon" />
 </head>
 <body>
     <nav>
