@@ -204,22 +204,4 @@ function showNotification(message, type) {
         }, 5000);
     }
 }
-```
 
-## Style dan Tampilan
-Styling dengan CSS di `styles.css`:
-```css
-body {
-    font-family: 'Courier New', monospace;
-    background-color: #000;
-    color: #0f0;
-}
-
-.container {
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #111;
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
-}
-```
