@@ -1,9 +1,9 @@
 # Cyber Security Competition Website
 # UAS Pemrograman Web - RA
 
-## Bagian 1: Client-side Programming (30%)
+# Bagian 1: Client-side Programming (30%)
 
-### 1.1 Manipulasi DOM dengan JavaScript (15%)
+## 1.1 Manipulasi DOM dengan JavaScript (15%)
 Form input dengan 4+ elemen yang berbeda dapat ditemukan di `daftar.php`:
 ```html
 <!-- Form dengan berbagai elemen input -->
@@ -48,7 +48,7 @@ Tampilan data dalam tabel HTML di `tabel_peserta.php`:
 </table>
 ```
 
-### 1.2 Event Handling (15%)
+## 1.2 Event Handling (15%)
 Di `script.js`, terdapat implementasi 3 event handling berbeda:
 
 1. Form submission validation:
@@ -81,9 +81,9 @@ if (!emailRegex.test(email.value.trim())) {
 }
 ```
 
-## Bagian 2: Server-side Programming (30%)
+# Bagian 2: Server-side Programming (30%)
 
-### 2.1 Pengelolaan Data dengan PHP (20%)
+## 2.1 Pengelolaan Data dengan PHP (20%)
 Di `daftar.php`:
 ```php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -97,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ```
 
-### 2.2 Objek PHP Berbasis OOP (10%)
+## 2.2 Objek PHP Berbasis OOP (10%)
 Class `Mahasiswa` di `Mahasiswa.php` dengan dua metode:
 ```php
 class Mahasiswa {
@@ -116,9 +116,9 @@ class Mahasiswa {
 }
 ```
 
-## Bagian 3: Database Management (20%)
+# Bagian 3: Database Management (20%)
 
-### 3.1 Pembuatan Tabel Database (5%)
+## 3.1 Pembuatan Tabel Database (5%)
 Di `database.sql`:
 ```sql
 CREATE TABLE peserta_lomba (
@@ -135,7 +135,7 @@ CREATE TABLE peserta_lomba (
 );
 ```
 
-### 3.2 Konfigurasi Koneksi Database (5%)
+## 3.2 Konfigurasi Koneksi Database (5%)
 Di `database.php`:
 ```php
 class Database {
@@ -150,16 +150,16 @@ class Database {
 }
 ```
 
-### 3.3 Manipulasi Data pada Database (10%)
+## 3.3 Manipulasi Data pada Database (10%)
 Di `Mahasiswa.php`:
 ```php
 $sql = "INSERT INTO peserta_lomba (nama, tanggal_lahir, asal_instansi, no_telepon, email, kategori_lomba, browser, ip_address) 
         VALUES ('$nama', '$tanggal_lahir', '$asal_instansi', '$no_telepon', '$email', '$kategori_lomba', '$browser', '$ip_address')";
 ```
 
-## Bagian 4: State Management (20%)
+# Bagian 4: State Management (20%)
 
-### 4.1 State Management dengan Session (10%)
+## 4.1 State Management dengan Session (10%)
 Di berbagai file:
 ```php
 // Start session di setiap file
@@ -178,7 +178,7 @@ if (isset($_SESSION['notification'])) {
 }
 ```
 
-### 4.2 Pengelolaan State dengan Browser Storage (10%)
+## 4.2 Pengelolaan State dengan Browser Storage (10%)
 Di `storage-utils.js`:
 ```javascript
 const StorageUtils = {
@@ -205,10 +205,10 @@ const StorageUtils = {
 };
 ```
 
-## Bagian Bonus: Hosting Aplikasi Web (20%)
-### Link WebSite: <http://CyberBattleZone.great-site.net>
+# Bagian Bonus: Hosting Aplikasi Web (20%)
+## Link WebSite: <http://CyberBattleZone.great-site.net>
 
-### Langkah-langkah Hosting Aplikasi Web (5%)
+## Langkah-langkah Hosting Aplikasi Web (5%)
 
 1. Persiapan File
    - Mengorganisir semua file proyek (PHP, CSS, JavaScript) ke dalam satu folder
@@ -234,7 +234,7 @@ const StorageUtils = {
    private $database = "if0_37966218_cyber_security_competition"; // nama database
    ```
    
-### Pemilihan Penyedia Hosting (5%)
+## Pemilihan Penyedia Hosting (5%)
 
 InfinityFree dipilih karena:
 1. Fitur Gratis yang Memadai:
@@ -256,7 +256,7 @@ InfinityFree dipilih karena:
    - Performa yang cukup untuk aplikasi skala kecil-menengah
    - Interface admin yang user-friendly
 
-### Keamanan Aplikasi Web (5%)
+## Keamanan Aplikasi Web (5%)
 
 1. Implementasi Keamanan Database
    ```php
@@ -286,7 +286,7 @@ InfinityFree dipilih karena:
    session_start();
    ```
 
-### Konfigurasi Server (5%)
+## Konfigurasi Server (5%)
 
 1. PHP Configuration
    ```ini
