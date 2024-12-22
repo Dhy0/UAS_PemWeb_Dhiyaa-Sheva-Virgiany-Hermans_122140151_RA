@@ -153,18 +153,8 @@ class Database {
 ### 3.3 Manipulasi Data pada Database (10%)
 Di `Mahasiswa.php`:
 ```php
-// Insert data
-public function simpanPeserta($conn) {
-    $sql = "INSERT INTO peserta_lomba (...) VALUES (...)";
-    return $conn->query($sql);
-}
-
-// Select data
-public static function getDaftarPeserta($conn) {
-    $sql = "SELECT * FROM peserta_lomba";
-    $result = $conn->query($sql);
-    return $peserta;
-}
+$sql = "INSERT INTO peserta_lomba (nama, tanggal_lahir, asal_instansi, no_telepon, email, kategori_lomba, browser, ip_address) 
+        VALUES ('$nama', '$tanggal_lahir', '$asal_instansi', '$no_telepon', '$email', '$kategori_lomba', '$browser', '$ip_address')";
 ```
 
 ## Bagian 4: State Management (20%)
@@ -189,19 +179,29 @@ if (isset($_SESSION['notification'])) {
 ```
 
 ### 4.2 Pengelolaan State dengan Browser Storage (10%)
-Di `script.js`:
+Di `storage-utils.js`:
 ```javascript
-// Notifikasi handling dengan temporary storage
-function showNotification(message, type) {
-    const notification = document.getElementById('notification');
-    if (notification) {
-        notification.textContent = message;
-        notification.className = `notification ${type}`;
-        notification.style.display = 'block';
+const StorageUtils = {
+    // Cookie Management
+    setCookie: function(name, value, days = 7) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = name + "=" + value + ";" + expires + ";path=/;SameSite=Strict";
+    },
 
-        setTimeout(() => {
-            notification.style.display = 'none';
-        }, 5000);
+    getCookie: function(name) {
+        // Implementation
+    },
+
+    deleteCookie: function(name) {
+        // Implementation
+    },
+
+    // Local Storage Management
+    setLocalStorage: function(key, value) {
+        localStorage.setItem(key, JSON.stringify(value));
     }
-}
+};
+```
 
