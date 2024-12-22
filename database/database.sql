@@ -1,6 +1,9 @@
+-- Buat Database
 CREATE DATABASE cyber_security_competition;
+-- Gunakan Database
 USE cyber_security_competition;
 
+-- Buat Tabel Peserta Lomba
 CREATE TABLE peserta_lomba (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nama VARCHAR(255) NOT NULL,

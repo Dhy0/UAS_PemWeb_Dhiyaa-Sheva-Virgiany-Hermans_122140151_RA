@@ -3,9 +3,11 @@ session_start();
 require_once 'database.php';
 require_once 'Mahasiswa.php';
 
+// Inisialisasi variabel untuk pesan
 $successMessage = '';
 $errorMessage = '';
 
+// Inisialisasi variabel yang akan menampung data dari form
 $nama = '';
 $tanggal_lahir = '';
 $asal_instansi = '';
@@ -13,6 +15,7 @@ $no_telepon = '';
 $email = '';
 $kategori_lomba = '';
 
+// Proses pendaftaran
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama = filter_input(INPUT_POST, 'nama', FILTER_SANITIZE_STRING);
     $tanggal_lahir = filter_input(INPUT_POST, 'tanggal_lahir', FILTER_SANITIZE_STRING);
@@ -21,6 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $kategori_lomba = filter_input(INPUT_POST, 'kategori_lomba', FILTER_SANITIZE_STRING);
 
+    // Validasi lanjutan
     $errors = [];
 
     if (empty($nama)) {
@@ -47,11 +51,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors[] = "Kategori lomba harus dipilih";
     }
 
+    // Jika tidak ada error
     if (empty($errors)) {
         try {
+            // Buat koneksi database
             $database = new Database();
             $conn = $database->conn;
 
+            // Buat objek Mahasiswa
             $peserta = new Mahasiswa(
                 $nama, 
                 $tanggal_lahir, 
@@ -61,12 +68,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $kategori_lomba
             );
 
+            // Simpan peserta
             if ($peserta->simpanPeserta($conn)) {
                 $_SESSION['notification'] = [
                     'type' => 'success',
                     'message' => "Selamat! Pendaftaran berhasil disimpan!"
                 ];
 
+                 // Reset form setelah berhasil disimpan
                 $nama = '';
                 $tanggal_lahir = '';
                 $asal_instansi = '';
@@ -96,10 +105,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+// Ambil notifikasi dari session jika ada
 $notification = null;
 if (isset($_SESSION['notification'])) {
     $notification = $_SESSION['notification'];
-    unset($_SESSION['notification']);
+    unset($_SESSION['notification']); // Hapus notifikasi dari session
 }
 ?>
 <!DOCTYPE html>
