@@ -206,7 +206,7 @@ const StorageUtils = {
 ```
 
 ## Bagian Bonus: Hosting Aplikasi Web (20%)
-### Link WebSite: <CyberBattleZone.great-site.net>
+### Link WebSite: <http://CyberBattleZone.great-site.net>
 
 ### Langkah-langkah Hosting Aplikasi Web (5%)
 
