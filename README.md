@@ -49,36 +49,34 @@ Tampilan data dalam tabel HTML di `tabel_peserta.php`:
 ```
 
 ## 1.2 Event Handling (15%)
-Di `script.js`, terdapat implementasi 3 event handling berbeda:
-
-1. Form submission validation:
+Event handling dan validasi form di `script.js`:
 ```javascript
 form.addEventListener('submit', function(e) {
     e.preventDefault();
     let isValid = true;
     let errors = [];
-    // ... validation logic
+    
+    // Validasi nama
+    const namaRegex = /^[a-zA-Z\s]+$/;
+    if (!namaRegex.test(nama.value.trim())) {
+        errors.push('Nama hanya boleh berisi huruf');
+        isValid = false;
+    }
+
+    // Validasi email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.value.trim())) {
+        errors.push('Format email tidak valid');
+        isValid = false;
+    }
+
+    // Validasi nomor telepon
+    const teleponRegex = /^[0-9]+$/;
+    if (!teleponRegex.test(noTelepon.value.trim())) {
+        errors.push('Nomor telepon hanya boleh berisi angka');
+        isValid = false;
+    }
 });
-```
-
-2. Nama validation dengan regex:
-```javascript
-const namaRegex = /^[a-zA-Z\s]+$/;
-if (!namaRegex.test(nama.value.trim())) {
-    namaError.textContent = 'Nama hanya boleh berisi huruf';
-    errors.push('Nama hanya boleh berisi huruf');
-    isValid = false;
-}
-```
-
-3. Email format validation:
-```javascript
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-if (!emailRegex.test(email.value.trim())) {
-    emailError.textContent = 'Format email tidak valid';
-    errors.push('Format email tidak valid');
-    isValid = false;
-}
 ```
 
 # Bagian 2: Server-side Programming (30%)
@@ -179,28 +177,35 @@ if (isset($_SESSION['notification'])) {
 ```
 
 ## 4.2 Pengelolaan State dengan Browser Storage (10%)
-Di `storage-utils.js`:
+Implementasi cookie dan storage di `storage-utils.js`:
 ```javascript
-const StorageUtils = {
-    // Cookie Management
-    setCookie: function(name, value, days = 7) {
-        const date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        const expires = "expires=" + date.toUTCString();
-        document.cookie = name + "=" + value + ";" + expires + ";path=/;SameSite=Strict";
+const CookieManager = {
+    setCookie: function(name, value, days) {
+        let expires = "";
+        if (days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/";
     },
-
+    
     getCookie: function(name) {
-        // Implementation
+        // ...
     },
-
+    
     deleteCookie: function(name) {
-        // Implementation
-    },
+        this.setCookie(name, "", -1);
+    }
+};
 
-    // Local Storage Management
-    setLocalStorage: function(key, value) {
+const StorageManager = {
+    setItem: function(key, value) {
         localStorage.setItem(key, JSON.stringify(value));
+    },
+    
+    getItem: function(key) {
+        return JSON.parse(localStorage.getItem(key));
     }
 };
 ```
