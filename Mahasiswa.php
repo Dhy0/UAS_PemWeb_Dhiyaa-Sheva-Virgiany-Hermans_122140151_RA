@@ -17,7 +17,6 @@ class Mahasiswa {
         $this->kategori_lomba = $kategori_lomba;
     }
 
-    // Metode untuk menyimpan data peserta ke database
     public function simpanPeserta($conn) {
         $nama = $conn->real_escape_string($this->nama);
         $tanggal_lahir = $conn->real_escape_string($this->tanggal_lahir);
@@ -34,7 +33,6 @@ class Mahasiswa {
         return $conn->query($sql);
     }
 
-    // Metode untuk mendapatkan semua peserta
     public static function getDaftarPeserta($conn) {
         $sql = "SELECT * FROM peserta_lomba";
         $result = $conn->query($sql);

@@ -3,13 +3,17 @@ session_start();
 require_once 'database.php';
 require_once 'Mahasiswa.php';
 
-// Inisialisasi variabel untuk pesan
 $successMessage = '';
 $errorMessage = '';
 
-// Proses pendaftaran
+$nama = '';
+$tanggal_lahir = '';
+$asal_instansi = '';
+$no_telepon = '';
+$email = '';
+$kategori_lomba = '';
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Validasi input
     $nama = filter_input(INPUT_POST, 'nama', FILTER_SANITIZE_STRING);
     $tanggal_lahir = filter_input(INPUT_POST, 'tanggal_lahir', FILTER_SANITIZE_STRING);
     $asal_instansi = filter_input(INPUT_POST, 'asal_instansi', FILTER_SANITIZE_STRING);
@@ -17,7 +21,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $kategori_lomba = filter_input(INPUT_POST, 'kategori_lomba', FILTER_SANITIZE_STRING);
 
-    // Validasi lanjutan
     $errors = [];
 
     if (empty($nama)) {
@@ -44,14 +47,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors[] = "Kategori lomba harus dipilih";
     }
 
-    // Jika tidak ada error
     if (empty($errors)) {
         try {
-            // Buat koneksi database
             $database = new Database();
             $conn = $database->conn;
 
-            // Buat objek Mahasiswa
             $peserta = new Mahasiswa(
                 $nama, 
                 $tanggal_lahir, 
@@ -61,12 +61,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $kategori_lomba
             );
 
-            // Simpan peserta
             if ($peserta->simpanPeserta($conn)) {
                 $_SESSION['notification'] = [
                     'type' => 'success',
                     'message' => "Selamat! Pendaftaran berhasil disimpan!"
                 ];
+
+                $nama = '';
+                $tanggal_lahir = '';
+                $asal_instansi = '';
+                $no_telepon = '';
+                $email = '';
+                $kategori_lomba = '';
+                
                 header("Location: daftar.php");
                 exit();
             } else {
@@ -89,11 +96,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Ambil notifikasi dari session jika ada
 $notification = null;
 if (isset($_SESSION['notification'])) {
     $notification = $_SESSION['notification'];
-    unset($_SESSION['notification']); // Hapus notifikasi dari session
+    unset($_SESSION['notification']);
 }
 ?>
 <!DOCTYPE html>

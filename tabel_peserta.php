@@ -3,11 +3,9 @@ session_start();
 require_once 'database.php';
 require_once 'Mahasiswa.php';
 
-// Inisialisasi koneksi database
 $database = new Database();
 $conn = $database->conn;
 
-// Ambil daftar peserta
 $peserta = Mahasiswa::getDaftarPeserta($conn);
 ?>
 <!DOCTYPE html>
@@ -34,7 +32,6 @@ $peserta = Mahasiswa::getDaftarPeserta($conn);
                 Selamat! <?php echo htmlspecialchars($_SESSION['nama_pendaftar']); ?> berhasil terdaftar.
             </div>
             <?php 
-            // Hapus session setelah ditampilkan
             unset($_SESSION['pendaftaran_berhasil']);
             unset($_SESSION['nama_pendaftar']);
             ?>
