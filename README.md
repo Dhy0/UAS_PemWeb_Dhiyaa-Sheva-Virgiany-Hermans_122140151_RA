@@ -211,7 +211,7 @@ const StorageManager = {
 ```
 
 # Bagian Bonus: Hosting Aplikasi Web (20%)
-## Link WebSite: <http://CyberBattleZone.great-site.net>
+## Link WebSite: <https://CyberBattleZone.great-site.net>
 
 ## Langkah-langkah Hosting Aplikasi Web (5%)
 
