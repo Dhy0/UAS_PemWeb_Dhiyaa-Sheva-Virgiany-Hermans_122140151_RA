@@ -1,29 +1,45 @@
-const StorageUtils = {
-    setCookie: function(name, value, days = 7) {
-        const date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        const expires = "expires=" + date.toUTCString();
-        document.cookie = name + "=" + value + ";" + expires + ";path=/;SameSite=Strict";
+// Fungsi untuk mengelola Cookie
+const CookieManager = {
+    // Menetapkan cookie dengan nama, nilai, dan masa berlaku (dalam hari)
+    setCookie: function(name, value, days) {
+        let expires = "";
+        if (days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/";
     },
 
+    // Mendapatkan nilai cookie berdasarkan nama
     getCookie: function(name) {
         const nameEQ = name + "=";
         const ca = document.cookie.split(';');
-        for(let i = 0; i < ca.length; i++) {
+        for (let i = 0; i < ca.length; i++) {
             let c = ca[i];
-            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1, c.length);
+            }
+            if (c.indexOf(nameEQ) === 0) {
+                return decodeURIComponent(c.substring(nameEQ.length, c.length));
+            }
         }
         return null;
     },
 
+    // Menghapus cookie berdasarkan nama
     deleteCookie: function(name) {
-        document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;SameSite=Strict';
-    },
+        this.setCookie(name, "", -1);
+    }
+};
 
-    setLocalStorage: function(key, value) {
+// Fungsi untuk mengelola Local Storage
+const StorageManager = {
+    // Menyimpan data ke localStorage
+    setItem: function(key, value) {
         try {
-            localStorage.setItem(key, JSON.stringify(value));
+            const serializedValue = JSON.stringify(value);
+            localStorage.setItem(key, serializedValue);
             return true;
         } catch (e) {
             console.error('Error saving to localStorage:', e);
@@ -31,7 +47,8 @@ const StorageUtils = {
         }
     },
 
-    getLocalStorage: function(key) {
+    // Mengambil data dari localStorage
+    getItem: function(key) {
         try {
             const item = localStorage.getItem(key);
             return item ? JSON.parse(item) : null;
@@ -41,7 +58,8 @@ const StorageUtils = {
         }
     },
 
-    removeLocalStorage: function(key) {
+    // Menghapus data dari localStorage
+    removeItem: function(key) {
         try {
             localStorage.removeItem(key);
             return true;
@@ -51,75 +69,83 @@ const StorageUtils = {
         }
     },
 
-    // Session Storage Management
-    setSessionStorage: function(key, value) {
+    // Membersihkan semua data di localStorage
+    clear: function() {
         try {
-            sessionStorage.setItem(key, JSON.stringify(value));
+            localStorage.clear();
             return true;
         } catch (e) {
-            console.error('Error saving to sessionStorage:', e);
+            console.error('Error clearing localStorage:', e);
             return false;
         }
-    },
-
-    getSessionStorage: function(key) {
-        try {
-            const item = sessionStorage.getItem(key);
-            return item ? JSON.parse(item) : null;
-        } catch (e) {
-            console.error('Error reading from sessionStorage:', e);
-            return false;
-        }
-    },
-
-    removeSessionStorage: function(key) {
-        try {
-            sessionStorage.removeItem(key);
-            return true;
-        } catch (e) {
-            console.error('Error removing from sessionStorage:', e);
-            return false;
-        }
-    },
-
-    // Form State Management
-    saveFormState: function(formId) {
-        const form = document.getElementById(formId);
-        if (!form) return;
-
-        const formData = {};
-        const elements = form.elements;
-        
-        for (let i = 0; i < elements.length; i++) {
-            const element = elements[i];
-            if (element.type !== 'submit' && element.type !== 'button') {
-                formData[element.name] = element.value;
-            }
-        }
-
-        this.setLocalStorage('formState_' + formId, formData);
-        this.setSessionStorage('formState_' + formId, formData);
-    },
-
-    loadFormState: function(formId) {
-        const form = document.getElementById(formId);
-        if (!form) return;
-
-        const formData = this.getLocalStorage('formState_' + formId) || 
-                        this.getSessionStorage('formState_' + formId);
-        
-        if (formData) {
-            Object.keys(formData).forEach(key => {
-                const element = form.elements[key];
-                if (element) {
-                    element.value = formData[key];
-                }
-            });
-        }
-    },
-
-    clearFormState: function(formId) {
-        this.removeLocalStorage('formState_' + formId);
-        this.removeSessionStorage('formState_' + formId);
     }
 };
+
+// Menggunakan storage untuk form data
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('pendaftaran-form');
+    
+    if (form) {
+        // Menyimpan data form sementara saat input berubah
+        const formInputs = form.querySelectorAll('input, select');
+        formInputs.forEach(input => {
+            // Memuat data yang tersimpan
+            const savedValue = StorageManager.getItem(`form_${input.id}`);
+            if (savedValue) {
+                input.value = savedValue;
+            }
+
+            // Menyimpan perubahan
+            input.addEventListener('change', function() {
+                StorageManager.setItem(`form_${this.id}`, this.value);
+            });
+        });
+
+        // Membersihkan storage saat form berhasil disubmit
+        form.addEventListener('submit', function() {
+            formInputs.forEach(input => {
+                StorageManager.removeItem(`form_${input.id}`);
+            });
+        });
+    }
+
+    // Menyimpan riwayat kunjungan menggunakan cookie
+    const lastVisit = CookieManager.getCookie('lastVisit');
+    if (lastVisit) {
+        console.log('Kunjungan terakhir:', new Date(lastVisit).toLocaleString());
+    }
+    CookieManager.setCookie('lastVisit', new Date().toISOString(), 30);
+
+    // Menampilkan status penyimpanan
+    console.log('Cookie tersimpan:', document.cookie);
+    console.log('Local Storage tersimpan:', localStorage);
+    
+    // Menampilkan informasi cookie dan storage di halaman
+    const containerDiv = document.querySelector('.container');
+    if (containerDiv) {
+        const storageInfo = document.createElement('div');
+        storageInfo.className = 'storage-info';
+        storageInfo.innerHTML = `
+            <h3>Informasi Penyimpanan</h3>
+            <div class="storage-details">
+                <h4>Cookie</h4>
+                <p>Kunjungan terakhir: ${lastVisit ? new Date(lastVisit).toLocaleString() : 'Pertama kali'}</p>
+            </div>
+        `;
+        containerDiv.appendChild(storageInfo);
+
+        // Update local storage content
+        function updateLocalStorageDisplay() {
+            const localStorageContent = document.getElementById('localStorage-content');
+            if (localStorageContent) {
+                const items = Object.keys(localStorage).map(key => {
+                    return `<div class="storage-item">
+                        <strong>${key}:</strong> ${localStorage.getItem(key)}
+                    </div>`;
+                });
+                localStorageContent.innerHTML = items.join('') || '<p>Tidak ada data tersimpan</p>';
+            }
+        }
+        updateLocalStorageDisplay();
+    }
+});
