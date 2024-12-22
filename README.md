@@ -205,3 +205,128 @@ const StorageUtils = {
 };
 ```
 
+## Bagian Bonus: Hosting Aplikasi Web (20%)
+### Link WebSite: CyberBattleZone.great-site.net
+
+### Langkah-langkah Hosting Aplikasi Web (5%)
+
+1. Persiapan File
+   - Mengorganisir semua file proyek (PHP, CSS, JavaScript) ke dalam satu folder
+   - Memastikan semua path relatif dalam kode sudah benar
+   - Mengekspor database MySQL dari localhost
+
+2. Pendaftaran di InfinityFree
+   - Membuat akun di infinityfree.net
+   - Memilih subdomain gratis atau menggunakan domain kustom
+   - Mengaktifkan akun dan menunggu verifikasi
+
+3. Upload File
+   - Login ke control panel InfinityFree
+   - Menggunakan File Manager untuk upload semua file website
+   - Mengatur permission file (644 untuk file, 755 untuk folder)
+
+4. Konfigurasi Database
+   ```php
+   // Mengupdate connection.php dengan kredensial InfinityFree
+   private $host = "sql103.infinityfree.com"; // host database InfinityFree
+   private $username = "if0_37966218"; // username database
+   private $password = "Anakanak123"; // password database
+   private $database = "if0_37966218_cyber_security_competition"; // nama database
+   ```
+   
+### Pemilihan Penyedia Hosting (5%)
+
+InfinityFree dipilih karena:
+1. Fitur Gratis yang Memadai:
+   - Hosting tanpa biaya
+   - SSL gratis
+   - Subdomain gratis
+   - Database MySQL
+   - Panel kontrol lengkap
+
+2. Spesifikasi Teknis yang Mendukung:
+   - PHP 7+ support
+   - MySQL/MariaDB
+   - 5GB disk space
+   - Unlimited bandwidth
+   - FTP access
+
+3. Kesesuaian dengan Proyek:
+   - Mendukung semua teknologi yang digunakan (PHP, MySQL, JavaScript)
+   - Performa yang cukup untuk aplikasi skala kecil-menengah
+   - Interface admin yang user-friendly
+
+### Keamanan Aplikasi Web (5%)
+
+1. Implementasi Keamanan Database
+   ```php
+   // Menggunakan prepared statements untuk mencegah SQL Injection
+   $stmt = $conn->prepare("INSERT INTO peserta (nama_lengkap, umur) VALUES (?, ?)");
+   $stmt->bind_param("si", $nama, $umur);
+   ```
+
+2. Validasi Input
+   ```php
+   // Server-side validation
+   $nama = filter_input(INPUT_POST, 'nama', FILTER_SANITIZE_STRING);
+   $umur = filter_input(INPUT_POST, 'umur', FILTER_VALIDATE_INT);
+   ```
+
+3. XSS Prevention
+   ```php
+   // Output escaping
+   echo htmlspecialchars($row['nama_lengkap']);
+   ```
+
+4. Session Security
+   ```php
+   // Konfigurasi session yang aman
+   ini_set('session.cookie_httponly', 1);
+   ini_set('session.use_only_cookies', 1);
+   session_start();
+   ```
+
+### Konfigurasi Server (5%)
+
+1. PHP Configuration
+   ```ini
+   ; Mengatur php.ini melalui .htaccess
+   php_value upload_max_filesize 10M
+   php_value post_max_size 10M
+   php_value max_execution_time 300
+   php_value max_input_time 300
+   ```
+
+2. Server Security
+   ```apache
+   # Konfigurasi .htaccess untuk keamanan
+   Options -Indexes
+   ServerSignature Off
+   
+   # Protect Directory
+   <FilesMatch "^\.">
+     Order allow,deny
+     Deny from all
+   </FilesMatch>
+   
+   # Prevent Script Execution
+   <Files ~ "\.(php|php3|php4|php5|phtml|pl|py|jsp|asp|htm|shtml|sh|cgi)$">
+     deny from all
+   </Files>
+   ```
+
+3. Database Configuration
+   ```sql
+   -- Mengoptimalkan performa database
+   SET GLOBAL max_connections = 150;
+   SET GLOBAL connect_timeout = 60;
+   ```
+
+4. Error Handling
+   ```php
+   // Konfigurasi error reporting yang aman untuk production
+   error_reporting(E_ALL);
+   ini_set('display_errors', 0);
+   ini_set('log_errors', 1);
+   ini_set('error_log', '/path/to/error.log');
+   ```
